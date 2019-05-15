@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const { NODE_ENV } = require('./config')
 const BookmarksService = require('./BookmarksService')
 const jsonParser = express.json()
+const xss = require('xss')
 
 const path = require('path')
 
@@ -87,6 +88,25 @@ app.get('/bookmarks/:bookmark_id', (req, res, next) => {
         .catch(next)
 })
 
+app.delete('/bookmarks/:bookmark_id', (req, res, next) => {
+    const knexInstance = req.app.get('db')
+    BookmarksService.deleteBookmark(
+        req.app.get('db'),
+        req.params.bookmark_id
+    )
+    .then(numRowAffected => {
+        if(!numRowAffected) {
+            return res
+            .status(404)
+            .json({ error: { message:"bookmark doesn't exist" }})
+            next()
+        }
+        res
+            .status(204)
+            .end()
+    })
+    .catch(next)
+})
 
 app.get('/', (req, res) => {
     res.send('Hello, world!')

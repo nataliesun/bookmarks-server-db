@@ -79,13 +79,13 @@ function makeMaliciousBookmark() {
         url: 'www.<script>alert("xss");</script>.com',
         title: 'Naughty naughty very naughty <script>alert("xss");</script>',
         description: `Bad image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
-        rating: 5
+        rating: 4
     }
     const expectedBookmark = {
         ...maliciousBookmark,
         title: 'Naughty naughty very naughty &lt;script&gt;alert(\"xss\");&lt;/script&gt;',
-        description: `Bad image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`,
-        url: 'www.lt;script&gt;alert(\"xss\");&lt;/script&gt;.com',
+        url: 'www.&lt;script&gt;alert(\"xss\");&lt;/script&gt;.com',
+        description: `Bad image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`,  
     }
     return {
         maliciousBookmark,
